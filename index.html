@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hackthon RSVP List API</title>
+  </head>
+  <style>
+    * {
+      font-family: cursive;
+    }
+    .container {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 2rem;
+      border: 12px double black;
+    }
+    .col > h4 {
+      text-align: center;
+    }
+    .row {
+      display: inline-flex;
+      width: 100%;
+    }
+    .col {
+      position: relative;
+      justify-content: center;
+      align-content: center;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h1>Hackthon RSVP List API</h1>
+      <div class="row">
+        <div class="col">
+          <h4>Signups</h4>
+          <ol id="list">
+            <!-- <li>Nidhey</li>
+            <li>Shubhangi</li>
+            <li>Shivani</li>
+            <li>Mahima</li> -->
+          </ol>
+        </div>
+        <div class="col" style="padding-left: 4rem">
+          <br>
+          <input placeholder="First Name" type="text" id="firstName" /><br><br>
+          <input placeholder="Last Name" type="text" id="lastName" /><br><br>
+          <input placeholder="Email" type="text" id="email" /><br><br>
+          <input placeholder="Password" type="password" id="password" /><br><br>
+          
+      
+          <button onclick="add()">RSVP</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  console.log("Called");
+  let fetchRes = fetch("/api/user")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+
+      let list = document.getElementById("list");
+
+      data.forEach((element) => {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(element.firstName));
+        list.appendChild(li);
+      });
+    });
+
+  function add() {
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    let body = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+    console.log(body);
+    let fetchRes = fetch("/api/user/signup", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        window.location.reload()
+      });
+  }
+  // fetchRes.then(res => {
+  //   console.log(res);
+  // })
+</script>
